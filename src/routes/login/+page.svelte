@@ -17,6 +17,11 @@
 	const user = userStore(auth);
 
 	async function onSignInWithEmail() {
+		let loginform = document.getElementById('loginform')!;
+		let invalid = loginform.querySelectorAll('input:invalid');
+
+		if (invalid.length != 0) return;
+
 		await signInWithEmailAndPassword(auth, email, password);
 	}
 
@@ -36,16 +41,26 @@
 <section>
 	<h1>Log in to BoatCup</h1>
 
-	<label for="email">Email</label>
-	<input type="email" name="email" id="email" bind:value={email} />
+	<form action="" id="loginform">
+		<label for="email">Email: </label>
+		<input type="email" name="email" id="email" bind:value={email} required />
 
-	<label for="password">Password</label>
-	<input type="password" name="password" id="password" bind:value={password} />
+		<br />
 
-	<a href="/signup">Don't have an account? Sign up!</a>
+		<label for="password">Password: </label>
+		<input type="password" name="password" id="password" bind:value={password} required />
 
-	<div class="options">
-		<button on:click={onSignInWithEmail}>Sign in using email</button>
-		<button on:click={onSignInWithGitHub}>Sign in using GitHub</button>
-	</div>
+		<br />
+		<br />
+
+		<a href="/signup">Don't have an account? Sign up!</a>
+
+		<br />
+		<br />
+
+		<div class="options">
+			<button on:click|preventDefault={onSignInWithEmail}>Sign in using email</button>
+			<button on:click|preventDefault={onSignInWithGitHub}>Sign in using GitHub</button>
+		</div>
+	</form>
 </section>

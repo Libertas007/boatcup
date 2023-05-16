@@ -1,20 +1,25 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
-	import logo from '$lib/images/svelte-logo.svg';
-	import github from '$lib/images/github.svg';
+	import logo from '$lib/images/logo.svg';
+	import { goto } from '$app/navigation';
+	import { app } from '../../firebase';
+	import { getAuth } from 'firebase/auth';
+	import { userStore } from 'sveltefire';
+
+	const auth = getAuth(app);
+
+	const user = userStore(auth);
 </script>
 
 <header>
-	<div class="corner">
+	<div class="corner logo">
 		<a href="/">
-			<p>BoatCup</p>
+			<img srcset={logo} alt="BoatCup Logo" />
+			<h1>BoatCup</h1>
 		</a>
 	</div>
 
 	<nav>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
-		</svg>
 		<ul>
 			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
 				<a href="/">Home</a>
@@ -22,19 +27,22 @@
 			<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
 				<a href="/about">About</a>
 			</li>
-			<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
-				<a href="/sverdle">Sverdle</a>
-			</li>
 		</ul>
 		<svg viewBox="0 0 2 3" aria-hidden="true">
 			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
 		</svg>
 	</nav>
 
-	<div class="corner">
-		<a href="https://github.com/sveltejs/kit">
-			<img src={github} alt="GitHub" />
-		</a>
+	<div class="corner right">
+		<div>
+			{#if $user}
+				<button on:click={() => goto('/dashboard')}>Dashboard</button>
+				<button on:click={() => auth.signOut()}>Log out</button>
+			{:else}
+				<button on:click={() => goto('/login')}>Log in</button>
+				<button on:click={() => goto('/signup')}>Sign up</button>
+			{/if}
+		</div>
 	</div>
 </header>
 
@@ -42,13 +50,11 @@
 	header {
 		display: flex;
 		justify-content: space-between;
+		height: 4rem;
 	}
 
 	.corner {
-		width: 3em;
-		height: 3em;
-		font-family: monospace;
-		font-weight: 700;
+		width: 17rem;
 	}
 
 	.corner a {
@@ -59,9 +65,35 @@
 		height: 100%;
 	}
 
+	.right {
+		display: flex;
+		align-items: center;
+		justify-content: end;
+	}
+
+	.right div {
+		display: flex;
+	}
+
+	.logo {
+		font-family: monospace;
+		font-weight: 700;
+		padding: 0.25rem 0.5rem;
+	}
+
+	.logo h1 {
+		font-size: 3rem;
+		margin: 0;
+		margin-left: 1rem;
+	}
+
+	a:hover {
+		text-decoration: none;
+	}
+
 	.corner img {
-		width: 2em;
-		height: 2em;
+		width: 4em;
+		height: 4em;
 		object-fit: contain;
 	}
 
@@ -99,16 +131,8 @@
 		height: 100%;
 	}
 
-	li[aria-current='page']::before {
-		--size: 6px;
-		content: '';
-		width: 0;
-		height: 0;
-		position: absolute;
-		top: 0;
-		left: calc(50% - var(--size));
-		border: var(--size) solid transparent;
-		border-top: var(--size) solid var(--color-theme-1);
+	li[aria-current='page'] {
+		color: var(--color-theme-1);
 	}
 
 	nav a {
@@ -118,7 +142,7 @@
 		padding: 0 0.5rem;
 		color: var(--color-text);
 		font-weight: 700;
-		font-size: 0.8rem;
+		font-size: 1rem;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
 		text-decoration: none;
