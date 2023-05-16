@@ -38,6 +38,11 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Log in</title>
+	<meta name="description" content="Log in to BoatCup" />
+</svelte:head>
+
 <section>
 	<h1>Log in to BoatCup</h1>
 

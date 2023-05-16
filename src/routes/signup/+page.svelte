@@ -5,10 +5,12 @@
 		getAuth,
 		GithubAuthProvider,
 		signInWithPopup,
-		createUserWithEmailAndPassword
+		createUserWithEmailAndPassword,
+		updateProfile
 	} from 'firebase/auth';
 	import { userStore } from 'sveltefire';
 
+	let name: string = '';
 	let email: string = '';
 	let password: string = '';
 
@@ -23,6 +25,10 @@
 		if (invalid.length != 0) return;
 
 		await createUserWithEmailAndPassword(auth, email, password);
+
+		updateProfile(auth.currentUser!, {
+			displayName: name
+		});
 	}
 
 	async function onSignInWithGitHub() {
@@ -38,10 +44,20 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Sign up</title>
+	<meta name="description" content="Sign up for BoatCup" />
+</svelte:head>
+
 <section>
 	<h1>Sign up for BoatCup</h1>
 
 	<form action="" id="loginform">
+		<label for="name">Display name: </label>
+		<input type="text" name="name" id="name" bind:value={name} required />
+
+		<br />
+
 		<label for="email">Email: </label>
 		<input type="email" name="email" id="email" bind:value={email} required />
 
