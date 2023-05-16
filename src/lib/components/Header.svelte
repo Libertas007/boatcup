@@ -6,8 +6,8 @@
 
 <header>
 	<div class="corner">
-		<a href="https://kit.svelte.dev">
-			<img src={logo} alt="SvelteKit" />
+		<a href="/">
+			<p>BoatCup</p>
 		</a>
 	</div>
 
@@ -47,6 +47,8 @@
 	.corner {
 		width: 3em;
 		height: 3em;
+		font-family: monospace;
+		font-weight: 700;
 	}
 
 	.corner a {
