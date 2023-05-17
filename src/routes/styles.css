@@ -83,6 +83,12 @@ input:invalid {
 	color: var(--color-theme-2);
 }
 
+label.required:after {
+	content: '*';
+	color: var(--color-theme-2);
+	margin-left: 0.25rem;
+}
+
 button {
 	color: var(--color-theme-1);
 	border-radius: 0.25rem;
@@ -97,6 +103,17 @@ button {
 button:hover {
 	background-color: var(--color-theme-1);
 	color: #fff;
+}
+
+button:disabled {
+	border: 2px solid #a2a2a2;
+	color: #a2a2a2;
+	cursor: not-allowed;
+}
+
+button:disabled:hover {
+	background-color: #fff;
+	color: #a2a2a2;
 }
 
 @media (min-width: 720px) {

@@ -12,6 +12,18 @@
 	let email: string = '';
 	let password: string = '';
 
+	let errorMessage: string = '';
+	let errorCode: string = '';
+
+	const messagesObj = {
+		'auth/email-already-in-use': 'Email already in use.',
+		'auth/invalid-email': 'Invalid email.',
+		'auth/operation-not-allowed': 'Operation not allowed.',
+		'auth/weak-password': 'Weak password.'
+	};
+
+	const messages = new Map(Object.entries(messagesObj));
+
 	const auth = getAuth(app);
 
 	const user = userStore(auth);
@@ -22,7 +34,12 @@
 
 		if (invalid.length != 0) return;
 
-		await signInWithEmailAndPassword(auth, email, password);
+		try {
+			await signInWithEmailAndPassword(auth, email, password);
+		} catch (error: any) {
+			errorCode = error.code || 'unknown';
+			errorMessage = messages.get(errorCode) || 'Unknown error.';
+		}
 	}
 
 	async function onSignInWithGitHub() {
@@ -46,13 +63,17 @@
 <section>
 	<h1>Log in to BoatCup</h1>
 
+	{#if errorMessage}
+		<p class="error">{errorMessage}</p>
+	{/if}
+
 	<form action="" id="loginform">
-		<label for="email">Email: </label>
+		<label for="email" class="required">Email: </label>
 		<input type="email" name="email" id="email" bind:value={email} required />
 
 		<br />
 
-		<label for="password">Password: </label>
+		<label for="password" class="required">Password: </label>
 		<input type="password" name="password" id="password" bind:value={password} required />
 
 		<br />
@@ -69,3 +90,10 @@
 		</div>
 	</form>
 </section>
+
+<style>
+	.error {
+		color: var(--color-theme-2);
+		font-weight: bold;
+	}
+</style>

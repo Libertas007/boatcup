@@ -9,10 +9,23 @@
 		updateProfile
 	} from 'firebase/auth';
 	import { userStore } from 'sveltefire';
+	import '../styles.css';
 
 	let name: string = '';
 	let email: string = '';
 	let password: string = '';
+
+	let errorMessage: string = '';
+	let errorCode: string = '';
+
+	const messagesObj = {
+		'auth/email-already-in-use': 'Email already in use.',
+		'auth/invalid-email': 'Invalid email.',
+		'auth/operation-not-allowed': 'Operation not allowed.',
+		'auth/weak-password': 'Weak password.'
+	};
+
+	const messages = new Map(Object.entries(messagesObj));
 
 	const auth = getAuth(app);
 
@@ -24,11 +37,15 @@
 
 		if (invalid.length != 0) return;
 
-		await createUserWithEmailAndPassword(auth, email, password);
-
-		updateProfile(auth.currentUser!, {
-			displayName: name
-		});
+		try {
+			await createUserWithEmailAndPassword(auth, email, password);
+			updateProfile(auth.currentUser!, {
+				displayName: name
+			});
+		} catch (error: any) {
+			errorCode = error.code || 'unknown';
+			errorMessage = messages.get(errorCode) || 'Unknown error.';
+		}
 	}
 
 	async function onSignInWithGitHub() {
@@ -52,18 +69,22 @@
 <section>
 	<h1>Sign up for BoatCup</h1>
 
+	{#if errorMessage}
+		<p class="error">{errorMessage}</p>
+	{/if}
+
 	<form action="" id="loginform">
-		<label for="name">Display name: </label>
+		<label for="name" class="required">Display name: </label>
 		<input type="text" name="name" id="name" bind:value={name} required />
 
 		<br />
 
-		<label for="email">Email: </label>
+		<label for="email" class="required">Email: </label>
 		<input type="email" name="email" id="email" bind:value={email} required />
 
 		<br />
 
-		<label for="password">Password: </label>
+		<label for="password" class="required">Password: </label>
 		<input type="password" name="password" id="password" bind:value={password} required />
 
 		<br />
@@ -80,3 +101,10 @@
 		</div>
 	</form>
 </section>
+
+<style>
+	.error {
+		color: var(--color-theme-2);
+		font-weight: bold;
+	}
+</style>
