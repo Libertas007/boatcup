@@ -1,7 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { app } from '../../firebase';
-	import { getAuth, reload, updateProfile } from 'firebase/auth';
+	import {
+		getAuth,
+		reload,
+		sendEmailVerification,
+		sendPasswordResetEmail,
+		updateProfile
+	} from 'firebase/auth';
 	import { userStore } from 'sveltefire';
 
 	const auth = getAuth(app);
@@ -9,6 +15,7 @@
 	const user = userStore(auth);
 
 	let name: string = $user?.displayName ?? '';
+	let verificationSent = false;
 
 	function update() {
 		if (name === auth.currentUser!.displayName || name === '') return;
@@ -18,6 +25,12 @@
 		});
 
 		location.reload();
+	}
+
+	async function verify() {
+		await sendEmailVerification(auth.currentUser!);
+		verificationSent = true;
+		reload(auth.currentUser!);
 	}
 </script>
 
@@ -31,6 +44,17 @@
 
 	{#if $user}
 		<p>Welcome, {$user.displayName}!</p>
+
+		{#if !$user.emailVerified}
+			<div class="notverified">
+				{#if !verificationSent}
+					<p>Your email is not verified.</p>
+					<button on:click={verify} class="danger">Send verification email</button>
+				{:else}
+					<p>Verification email sent. Check your inbox, please.</p>
+				{/if}
+			</div>
+		{/if}
 
 		<h2>Profile info</h2>
 		<form id="update">
@@ -49,3 +73,16 @@
 		<a href="/login">Log in</a>
 	{/if}
 </section>
+
+<style>
+	.notverified {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		padding: 0.2rem;
+		color: var(--color-theme-2);
+		width: 100%;
+		border: 2px solid var(--color-theme-2);
+		border-radius: 0.5rem;
+	}
+</style>
