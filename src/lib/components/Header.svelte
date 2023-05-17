@@ -39,8 +39,8 @@
 				<button on:click={() => goto('/dashboard')}>Dashboard</button>
 				<button on:click={() => auth.signOut()}>Log out</button>
 			{:else}
+				<button class="cta" on:click={() => goto('/signup')}>Sign up</button>
 				<button on:click={() => goto('/login')}>Log in</button>
-				<button on:click={() => goto('/signup')}>Sign up</button>
 			{/if}
 		</div>
 	</div>

@@ -43,7 +43,7 @@
 			<button on:click|preventDefault={update}>Update profile</button>
 		</form>
 
-		<button on:click={() => auth.signOut()}>Sign out</button>
+		<button on:click={() => auth.signOut()} class="danger">Log out</button>
 	{:else}
 		<p>To view the dashboard, you must be logged in.</p>
 		<a href="/login">Log in</a>

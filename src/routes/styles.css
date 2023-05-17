@@ -39,7 +39,7 @@ h1 {
 }
 
 h2 {
-	font-size: 1rem;
+	font-size: 1.5rem;
 }
 
 pre {
@@ -100,13 +100,34 @@ button {
 	transition: all 0.2s ease-in-out;
 }
 
+button.cta {
+	background-color: var(--color-theme-1);
+	color: #fff;
+}
+
+button.danger {
+	border: 2px solid var(--color-theme-2);
+	background-color: #fff;
+	color: var(--color-theme-2);
+}
+
 button:hover {
 	background-color: var(--color-theme-1);
 	color: #fff;
 }
 
+button.cta:hover {
+	background-color: #fff;
+	color: var(--color-theme-1);
+}
+
+button.danger:hover {
+	background-color: var(--color-theme-2);
+	color: #fff;
+}
+
 button:disabled {
-	border: 2px solid #a2a2a2;
+	border: 2px dashed #a2a2a2;
 	color: #a2a2a2;
 	cursor: not-allowed;
 }
