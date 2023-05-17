@@ -1,6 +1,7 @@
 <script>
 	import Header from '$lib/components/Header.svelte';
 	import './styles.css';
+	import logo from '$lib/images/logo.png';
 </script>
 
 <div class="app">
@@ -14,6 +15,22 @@
 		<p>BoatCup is made by Adam Svoboda. (C) 2023</p>
 	</footer>
 </div>
+
+<svelte:head>
+	<meta property="og:image" content="logo.png" />
+	<meta property="og:title" content="BoatCup" />
+	<meta
+		property="og:description"
+		content="BoatCup is a programming challenge in the Boat programming language."
+	/>
+
+	<meta property="twitter:image" content="logo.png" />
+	<meta property="twitter:title" content="BoatCup" />
+	<meta
+		property="twitter:description"
+		content="BoatCup is a programming challenge in the Boat programming language."
+	/>
+</svelte:head>
 
 <style>
 	.app {
