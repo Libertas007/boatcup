@@ -3,35 +3,38 @@
 	import { applyActionCode, checkActionCode, getAuth, sendPasswordResetEmail } from 'firebase/auth';
 	import { app } from '../../../firebase';
 	import { browser } from '$app/environment';
+	import type { PageData } from './$types';
 
 	let success = false;
 	let checkEmail = false;
 	const auth = getAuth(app);
 	let restoredEmail = '';
 
-	if (browser) {
-		const urlParams = new URLSearchParams(window.location.search);
-		const actionCode = urlParams.get('oobCode') || '';
+	export let data: PageData;
 
-		// Confirm the action code is valid.
-		checkActionCode(auth, actionCode)
-			.then((info) => {
-				// Get the restored email address.
-				restoredEmail = info.data.email ?? '';
+	const actionCode = data.params.get('oobCode') || '';
 
-				// Revert to the old email.
-				return applyActionCode(auth, actionCode);
-			})
-			.then(() => {
-				success = true;
-			});
-	}
+	// Confirm the action code is valid.
+	let check = checkActionCode(auth, actionCode).then((info) => {
+		// Get the restored email address.
+		restoredEmail = info.data.email ?? '';
+
+		// Revert to the old email.
+		return applyActionCode(auth, actionCode);
+	});
+
+	check.then(() => {
+		success = true;
+	});
+
 	async function resetPassword() {
 		await sendPasswordResetEmail(auth, restoredEmail);
 	}
 </script>
 
-{#if success}
+{#await check}
+	<p>Wait a minute...</p>
+{:then _}
 	<h1>Your email has been recovered.</h1>
 
 	{#if checkEmail}
@@ -40,6 +43,4 @@
 		<p>You may also want to reset your password.</p>
 		<button on:click={resetPassword}>Reset Password</button>
 	{/if}
-{:else}
-	<p>Wait a minute...</p>
-{/if}
+{/await}

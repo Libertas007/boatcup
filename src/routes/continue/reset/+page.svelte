@@ -9,26 +9,19 @@
 		verifyPasswordResetCode
 	} from 'firebase/auth';
 	import { app } from '../../../firebase';
-	import { browser } from '$app/environment';
+	import type { PageData } from './$types';
 
 	let success = false;
-	let display = false;
 	let newPassword = '';
-	let email = '';
 	let message = '';
-	let actionCode = '';
+
+	export let data: PageData;
 
 	const auth = getAuth(app);
 
-	if (browser) {
-		const urlParams = new URLSearchParams(window.location.search);
-		actionCode = urlParams.get('oobCode') || '';
+	let actionCode = data.params.get('oobCode') || '';
 
-		verifyPasswordResetCode(auth, actionCode).then((e) => {
-			display = true;
-			email = e;
-		});
-	}
+	let verification = verifyPasswordResetCode(auth, actionCode);
 
 	async function resetPassword() {
 		if (newPassword.length < 6) {
@@ -45,7 +38,9 @@
 	}
 </script>
 
-{#if display}
+{#await verification}
+	<p>Wait a minute...</p>
+{:then email}
 	{#if success}
 		<h1>It's all done!</h1>
 		<p>Redírecting to Dashboard in 2 seconds...</p>
@@ -62,9 +57,7 @@
 
 		<button on:click={resetPassword}>Reset password</button>
 	{/if}
-{:else}
-	<p>Wait a minute...</p>
-{/if}
+{/await}
 
 <style>
 	.error {

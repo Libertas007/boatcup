@@ -2,28 +2,27 @@
 	import { goto } from '$app/navigation';
 	import { applyActionCode, getAuth } from 'firebase/auth';
 	import { app } from '../../../firebase';
-	import { browser } from '$app/environment';
+	import type { PageData } from './$types';
 
 	let success = false;
 
-	if (browser) {
-		const urlParams = new URLSearchParams(window.location.search);
-		const actionCode = urlParams.get('oobCode') || '';
+	export let data: PageData;
+	const auth = getAuth(app);
 
-		const auth = getAuth(app);
+	let actionCode = data.params.get('oobCode') || '';
 
-		applyActionCode(auth, actionCode).then(() => {
-			success = true;
-			setTimeout(() => {
-				goto('/dashboard');
-			}, 2000);
-		});
-	}
+	let action = applyActionCode(auth, actionCode);
+
+	action.then(() => {
+		setTimeout(() => {
+			goto('/dashboard');
+		}, 2000);
+	});
 </script>
 
-{#if success}
+{#await action}
+	<p>Wait a minute, loading data.</p>
+{:then _}
 	<h1>Your email has been confirmed</h1>
 	<p>Redírecting to Dashboard in 2 seconds...</p>
-{:else}
-	<p>Wait a minute...</p>
-{/if}
+{/await}
