@@ -28,15 +28,12 @@
 				<a href="/about">About</a>
 			</li>
 		</ul>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
-		</svg>
 	</nav>
 
 	<div class="corner right">
 		<div>
 			{#if $user}
-				<button on:click={() => goto('/dashboard')}>Dashboard</button>
+				<button class="cta" on:click={() => goto('/dashboard')}>Dashboard</button>
 				<button on:click={() => auth.signOut()}>Log out</button>
 			{:else}
 				<button class="cta" on:click={() => goto('/signup')}>Sign up</button>
@@ -82,7 +79,7 @@
 	}
 
 	.logo h1 {
-		font-size: 3rem;
+		font-size: 2.5rem;
 		margin: 0;
 		margin-left: 1rem;
 	}
@@ -103,16 +100,6 @@
 		--background: rgba(255, 255, 255, 0.7);
 	}
 
-	svg {
-		width: 2em;
-		height: 3em;
-		display: block;
-	}
-
-	path {
-		fill: var(--background);
-	}
-
 	ul {
 		position: relative;
 		padding: 0;
@@ -129,6 +116,15 @@
 	li {
 		position: relative;
 		height: 100%;
+		transition: all 200ms ease-in-out;
+	}
+
+	li[aria-current='page'] > a::before {
+		content: '🛥️';
+	}
+
+	li:not([aria-current='page']) > a::before {
+		content: '⛵';
 	}
 
 	li[aria-current='page'] {
@@ -142,11 +138,11 @@
 		padding: 0 0.5rem;
 		color: var(--color-text);
 		font-weight: 700;
-		font-size: 1rem;
-		text-transform: uppercase;
+		font-size: 1.2rem;
 		letter-spacing: 0.1em;
 		text-decoration: none;
 		transition: color 0.2s linear;
+		font-family: monospace;
 	}
 
 	a:hover {

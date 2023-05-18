@@ -48,7 +48,7 @@
 		{#if !$user.emailVerified}
 			<div class="notverified">
 				{#if !verificationSent}
-					<p>Your email is not verified.</p>
+					<p>Your email is not verified. Verify your email to unlock all the features.</p>
 					<button on:click={verify} class="danger">Send verification email</button>
 				{:else}
 					<p>Verification email sent. Check your inbox, please.</p>
@@ -79,7 +79,7 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
-		padding: 0.2rem;
+		padding: 0.2rem 0.5rem;
 		color: var(--color-theme-2);
 		width: 100%;
 		border: 2px solid var(--color-theme-2);
