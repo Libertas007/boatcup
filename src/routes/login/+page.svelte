@@ -77,8 +77,9 @@
 		<input type="password" name="password" id="password" bind:value={password} required />
 
 		<br />
+		<a href="/reset-password">Have you forgotten your password? Get a new one!</a>
 		<br />
-
+		<br />
 		<a href="/signup">Don't have an account? Sign up!</a>
 
 		<br />
