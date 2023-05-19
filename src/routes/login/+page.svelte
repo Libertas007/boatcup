@@ -85,8 +85,8 @@
 		<br />
 
 		<div class="options">
-			<button on:click|preventDefault={onSignInWithEmail}>Sign in using email</button>
-			<button on:click|preventDefault={onSignInWithGitHub}>Sign in using GitHub</button>
+			<button on:click|preventDefault={onSignInWithEmail}>Log in using email</button>
+			<button on:click|preventDefault={onSignInWithGitHub}>Log in using GitHub</button>
 		</div>
 	</form>
 </section>
