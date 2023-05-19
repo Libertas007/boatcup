@@ -63,7 +63,8 @@ pre {
 }
 
 input,
-button {
+button,
+input::file-selector-button {
 	font-size: inherit;
 	font-family: inherit;
 	outline: none;
@@ -89,7 +90,8 @@ label.required:after {
 	margin-left: 0.25rem;
 }
 
-button {
+button,
+input::file-selector-button {
 	color: var(--color-theme-1);
 	border-radius: 0.25rem;
 	border: 2px solid var(--color-theme-1);
@@ -111,7 +113,8 @@ button.danger {
 	color: var(--color-theme-2);
 }
 
-button:hover {
+button:hover,
+input::file-selector-button:hover {
 	background-color: var(--color-theme-1);
 	color: #fff;
 }
@@ -126,13 +129,17 @@ button.danger:hover {
 	color: #fff;
 }
 
-button:disabled {
+button:disabled,
+input:disabled,
+input:disabled::file-selector-button {
 	border: 2px dashed #a2a2a2;
 	color: #a2a2a2;
 	cursor: not-allowed;
 }
 
-button:disabled:hover {
+button:disabled:hover,
+input:disabled:hover,
+input:disabled::file-selector-button:hover {
 	background-color: #fff;
 	color: #a2a2a2;
 }

@@ -5,6 +5,9 @@
 
 	import { fly } from 'svelte/transition';
 	import { cubicIn, cubicOut } from 'svelte/easing';
+	import PuzzlesSidebar from '$lib/components/PuzzlesSidebar.svelte';
+	import PuzzleDetails from '$lib/components/PuzzleDetails.svelte';
+	import { currentlyBrowsing } from './stores';
 
 	const duration = 300;
 	const delay = duration + 100;
@@ -22,9 +25,23 @@
 	<Header />
 
 	{#key pathname}
-		<main in:fly={transitionIn} out:fly={transitionOut}>
-			<slot />
-		</main>
+		<div class="sidebyside">
+			{#if pathname.startsWith('/puzzles')}
+				<aside in:fly={transitionIn} out:fly={transitionOut}>
+					<PuzzlesSidebar />
+				</aside>
+			{/if}
+
+			<main in:fly={transitionIn} out:fly={transitionOut}>
+				<slot />
+			</main>
+
+			{#if pathname.startsWith('/puzzles') && $currentlyBrowsing !== 'none'}
+				<aside in:fly={transitionIn} out:fly={transitionOut}>
+					<PuzzleDetails />
+				</aside>
+			{/if}
+		</div>
 	{/key}
 
 	<footer>
@@ -49,6 +66,16 @@
 </svelte:head>
 
 <style>
+	.sidebyside {
+		display: flex;
+		flex-direction: row;
+	}
+
+	aside {
+		width: 100%;
+		max-width: 20rem;
+		padding: 1rem;
+	}
 	.app {
 		display: flex;
 		flex-direction: column;
